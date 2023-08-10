@@ -160,28 +160,7 @@ class Bard:
             "_reqid": str(self._reqid),
             "rt": "c",
         }
-        if self.google_translator_api_key is not None:
-            google_official_translator = translate.Client(
-                api_key=self.google_translator_api_key
-            )
-
-        # [Optional] Set language
-        if (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is None
-        ):
-            translator_to_eng = GoogleTranslator(source="auto", target="en")
-            input_text = translator_to_eng.translate(input_text)
-        elif (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is not None
-        ):
-            input_text = google_official_translator.translate(
-                input_text, target_language="en"
-            )
-
+        
         # Make post data structure and insert prompt
         input_text_struct = [
             [input_text],
@@ -227,10 +206,7 @@ class Bard:
 
         # [Optional] translated by google translator
         # Unofficial
-        if (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is None
+        if ( True
         ):
             translator_to_lang = GoogleTranslator(source="auto", target=self.language)
             parsed_answer[4] = [
@@ -239,21 +215,7 @@ class Bard:
             ]
 
         # Official google cloud translation API
-        elif (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is not None
-        ):
-            parsed_answer[4] = [
-                [
-                    x[0],
-                    [google_official_translator(x[1][0], target_language=self.language)]
-                    + x[1][1:],
-                    x[2],
-                ]
-                for x in parsed_answer[4]
-            ]
-
+        
         # [Optional] get program_lang & code
         try:
             program_lang = (
