@@ -160,27 +160,7 @@ class Bard:
             "_reqid": str(self._reqid),
             "rt": "c",
         }
-        if self.google_translator_api_key is not None:
-            google_official_translator = translate.Client(
-                api_key=self.google_translator_api_key
-            )
-
-        # [Optional] Set language
-        if (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is None
-        ):
-            translator_to_eng = GoogleTranslator(source="auto", target="en")
-            input_text = translator_to_eng.translate(input_text)
-        elif (
-            self.language is not None
-            and self.language not in ALLOWED_LANGUAGES
-            and self.google_translator_api_key is not None
-        ):
-            input_text = google_official_translator.translate(
-                input_text, target_language="en"
-            )
+        
 
         # Make post data structure and insert prompt
         input_text_struct = [
